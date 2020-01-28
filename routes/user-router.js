@@ -2,7 +2,7 @@ const express = require("express");
 const { addUser, findUser, getUsers } = require("../helpers/users-model");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
-const restricted = require("../middleware/restricted-middleware");
+const { restricted } = require("../middleware/restricted-middleware");
 
 router.post("/register", (req, res) => {
   const { username, password } = req.body;
@@ -43,6 +43,18 @@ router.post("/logout", (req, res) => {
 });
 
 router.get("/users", restricted, (req, res) => {
+  getUsers()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(error => {
+      res.status(500).json({
+        errorMessage: `Could not retrieve registered users at this moment`
+      });
+    });
+});
+
+router.get("/restricted/users", (req, res) => {
   getUsers()
     .then(users => {
       res.status(200).json(users);

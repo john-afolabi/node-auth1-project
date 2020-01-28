@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
 const usersRouter = require("../routes/user-router");
+const { globalRestriction } = require("../middleware/restricted-middleware");
 
 const server = express();
 
@@ -33,7 +34,7 @@ server.use(
   })
 );
 
-server.use("/api/", usersRouter);
+server.use("/api/", globalRestriction, usersRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: `This API is working correctly` });
