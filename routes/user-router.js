@@ -35,6 +35,13 @@ router.post("/login", (req, res) => {
     });
 });
 
+router.post("/logout", (req, res) => {
+  req.session.destroy();
+  res
+    .status(200)
+    .json({ message: `You have logged out successfully. Goodbye!` });
+});
+
 router.get("/users", restricted, (req, res) => {
   getUsers()
     .then(users => {
